@@ -22,7 +22,7 @@ namespace Plugin.Members
 
 		public DocumentPluginMethodSettings Settings
 		{
-			get => this._settings?? (this._settings = new DocumentPluginMethodSettings());
+			get => this._settings ?? (this._settings = new DocumentPluginMethodSettings());
 		}
 
 		public DocumentPluginMethod()
@@ -103,10 +103,10 @@ namespace Plugin.Members
 		{
 			PluginMethodWrapper method = this._method;
 			VariableWrapper[] variables = this.GetVariables();
-			this.InvokeMethod(method, variables);
+			InvokeMethod(method, variables);
 		}
 
-		private void InvokeMethod(PluginMethodWrapper method, VariableWrapper[] variables)
+		private static void InvokeMethod(PluginMethodWrapper method, VariableWrapper[] variables)
 		{
 			Object[] args = Array.ConvertAll(variables, p => p.GetObject());
 			Object result = method.Method.Invoke(args);

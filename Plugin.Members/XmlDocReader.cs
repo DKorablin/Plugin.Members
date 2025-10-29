@@ -10,10 +10,12 @@ namespace Plugin.Members
 		/// <summary>Found member documentation information</summary>
 		public class DocItem
 		{
-			/// <summary>Generat description</summary>
+			/// <summary>General description</summary>
 			public String Summary { get; set; }
+
 			/// <summary>Additional comments</summary>
 			public String Remarks { get; set; }
+
 			/// <summary>Description about return type</summary>
 			public String Returns { get; set; }
 		}
@@ -29,7 +31,10 @@ namespace Plugin.Members
 			if(!File.Exists(xmlPath))
 				throw new FileNotFoundException("File not found", xmlPath);
 
-			this._document = new XmlDocument();
+			this._document = new XmlDocument()
+			{
+				XmlResolver = null,
+			};
 			this._document.Load(xmlPath);
 		}
 

@@ -82,8 +82,6 @@ namespace Plugin.Members
 			if(this._plugins == null)
 				this._plugins = new PluginsDlg(this);
 			this._plugins.Show();
-			/*using(PluginsDlg dlg = new PluginsDlg(this))
-				dlg.ShowDialog();*/
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace Plugin.Members.TypeWrapper
 		private readonly IPluginTypeInfo _info;
 
 		private String _friendlyName;
-		private TypeStrategy _typeStrategy;
+		private readonly TypeStrategy _typeStrategy;
 
 		public EditorType EditorType { get => this._typeStrategy.EditorType; }
 
@@ -110,9 +110,11 @@ namespace Plugin.Members.TypeWrapper
 			String[] array = this._typeStrategy.GetSelectionList();
 			if(array != null && array.Length == 0)
 			{
-				List<String> list = new List<String>();
-				list.Add(TypeStrategy.NullRepresentation);
-				list.Add(this._typeStrategy.TypeName);
+				List<String> list = new List<String>()
+				{
+					TypeStrategy.NullRepresentation,
+					this._typeStrategy.TypeName,
+				};
 				/*foreach(PluginTypeWrapper current in this.SubTypes)
 				{
 					if(current.IsValid)

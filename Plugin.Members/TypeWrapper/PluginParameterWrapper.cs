@@ -19,8 +19,6 @@ namespace Plugin.Members.TypeWrapper
 
 		public ICollection<PluginTypeWrapper> Members { get => this._type.Members; }
 
-		//public ICollection<PluginTypeWrapper> SubTypes { get => this._type.SubTypes; }
-
 		public String TypeName { get => this._type.TypeName; }
 
 		public String VariableName { get => this._parameter.Name; }
@@ -69,7 +67,7 @@ namespace Plugin.Members.TypeWrapper
 			errorMessage = null;
 
 			if(text == null)
-				errorMessage = String.Format(CultureInfo.CurrentUICulture, "'{0}' is not valid value for this type", value);
+				errorMessage = $"'{value}' is not valid value for this type";
 			return text;
 		}
 	}

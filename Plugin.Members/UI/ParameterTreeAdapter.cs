@@ -68,23 +68,21 @@ namespace Plugin.Members.UI
 			public String DummyProperty { get => null; }
 		}
 
-		#region Fields
 		internal const Int32 NumColumns = 3;
 
-		private ParameterTreeAdapter[] _children;
+		private readonly ParameterTreeAdapter[] _children;
 
-		private ParameterTreeAdapter _parent;
+		private readonly ParameterTreeAdapter _parent;
 
-		private Boolean _readOnly;
+		private readonly Boolean _readOnly;
 
 		private Int32 _relativeRow;
 
-		private VariableWrapper[] _variables;
+		private readonly VariableWrapper[] _variables;
 
-		private ITree _virtualTree;
+		private readonly ITree _virtualTree;
 
-		private VirtualTreeControl _virtualTreeControl;
-		#endregion Fields
+		private readonly VirtualTreeControl _virtualTreeControl;
 
 		public event BranchModificationEventHandler OnBranchModification;
 
@@ -107,7 +105,7 @@ namespace Plugin.Members.UI
 
 		public Int32 VisibleItemCount { get => this._variables.Length; }
 
-		internal ParameterTreeAdapter(ITree virtualTree, VirtualTreeControl virtualTreeControl, VariableWrapper[] variables, bool readOnly, ParameterTreeAdapter parent)
+		internal ParameterTreeAdapter(ITree virtualTree, VirtualTreeControl virtualTreeControl, VariableWrapper[] variables, Boolean readOnly, ParameterTreeAdapter parent)
 		{
 			this._virtualTree = virtualTree;
 			this._virtualTreeControl = virtualTreeControl;

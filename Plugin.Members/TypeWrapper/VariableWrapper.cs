@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace Plugin.Members.TypeWrapper
 {
-	/// <summary>Информация о переменной для теста</summary>
+	/// <summary>Variable information for the test</summary>
 	[Serializable]
 	internal class VariableWrapper
 	{
@@ -14,13 +14,16 @@ namespace Plugin.Members.TypeWrapper
 		private VariableWrapper[] childVariables;
 		private PluginParameterWrapper currentMember;
 		private PluginParameterWrapper declaredMember;
+
 		[NonSerialized]
 		private Boolean _isKey;
 		private Boolean _isValid = true;
 		private Boolean _canModify = true;
 		private String _name;
+
 		[NonSerialized]
 		private VariableWrapper parent;
+
 		[NonSerialized]
 		private PluginMethodWrapper _methodInfo;
 		private String _value;
@@ -82,7 +85,7 @@ namespace Plugin.Members.TypeWrapper
 
 		internal VariableWrapper(PluginParameterWrapper declaredMember)
 		{
-			this.currentMember = declaredMember ?? throw new ArgumentNullException(nameof(declaredMember)); ;
+			this.currentMember = declaredMember ?? throw new ArgumentNullException(nameof(declaredMember));
 			this.declaredMember = declaredMember;
 			this._value = this.currentMember.GetDefaultValue();
 		}

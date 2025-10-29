@@ -14,7 +14,9 @@ namespace Plugin.Members.TypeWrapper
 	{
 		public const String LengthRepresentation = "length=";
 		public const String NullRepresentation = "(null)";
-		internal static IDictionary<String, Type> typesCache = new Dictionary<String, Type>();
+
+		internal static readonly IDictionary<String, Type> typesCache = new Dictionary<String, Type>();
+
 		private static readonly List<String> numericTypes = new List<String>(new String[]
 		{
 			typeof(Int16).FullName,
@@ -30,7 +32,7 @@ namespace Plugin.Members.TypeWrapper
 			typeof(Decimal).FullName,
 		});
 
-		private String[] _enumChoices;
+		private readonly String[] _enumChoices;
 
 		private TypeProperty _typeProperty;
 
@@ -166,11 +168,7 @@ namespace Plugin.Members.TypeWrapper
 		}
 
 		public Int32 GetEnumMemberCount()
-		{
-			if(this._enumChoices != null)
-				return this._enumChoices.Length;
-			return 0;
-		}
+			=> this._enumChoices?.Length ?? 0;
 
 		public String ValidateAndCanonicalize(String input, out Int32 lengthValue)
 		{
@@ -187,6 +185,7 @@ namespace Plugin.Members.TypeWrapper
 					typeof(String),
 					Type.GetType(this.TypeName + "&")
 				});
+
 				Boolean isValid = (Boolean)method.Invoke(null, array2);
 				if(isValid)
 					return array2[1].ToString();
@@ -197,8 +196,7 @@ namespace Plugin.Members.TypeWrapper
 				switch(this.TypeName)
 				{
 				case "System.Boolean":
-					Boolean dummy;
-					return Boolean.TryParse(input, out dummy) ? text : null;
+					return Boolean.TryParse(input, out Boolean _) ? text : null;
 				case "System.Char":
 					return input.Length == 1 ? text : null;
 				case "System.Guid":
@@ -213,8 +211,7 @@ namespace Plugin.Members.TypeWrapper
 					if(input.Equals(TypeStrategy.NullRepresentation, StringComparison.Ordinal))
 						return text;
 
-					Uri uri;
-					return Uri.TryCreate(input, UriKind.Absolute, out uri) ? uri.ToString() : null;
+					return Uri.TryCreate(input, UriKind.Absolute, out Uri uri) ? uri.ToString() : null;
 				case "System.Xml.XmlQualifiedName":
 					if(input.Equals(TypeStrategy.NullRepresentation))
 						return text;
@@ -230,8 +227,7 @@ namespace Plugin.Members.TypeWrapper
 						return null;
 					}
 				case "System.DateTimeOffset":
-					DateTimeOffset offset;
-					return DateTimeOffset.TryParse(input, out offset) ? offset.ToString() : null;
+					return DateTimeOffset.TryParse(input, out DateTimeOffset offset) ? offset.ToString() : null;
 				case "System.TimeSpan":
 					try
 					{
@@ -263,15 +259,15 @@ namespace Plugin.Members.TypeWrapper
 		}
 
 		public Object GetObject(String value, VariableWrapper[] variables)
-		{//TODO: Метод валидации: ServiceMemberInfo.ValidateAndCanonicalize(String, out String) метод парсинга: TypeStrategy.GetObject(String, VariableInfo[])
+		{//TODO: Validation method: ServiceMemberInfo.ValidateAndCanonicalize(String, out String) Parsing method: TypeStrategy.GetObject(String, VariableInfo[])
 			if(this._enumChoices != null)
 				return Enum.Parse(this.ClientType, value);
 			else if(TypeStrategy.numericTypes.Contains(this.TypeName))
 			{
 				MethodInfo parse = Type.GetType(this.TypeName).GetMethod("Parse", new Type[] { typeof(String), });
 				return parse.Invoke(null, new Object[] { value, });
-				//TODO: Вызов Parse(value,CultureInfo.CurrentUICulture) был заменён, т.к. Decimal (100,21 не воспринимает парсер, а 100.21 не воспринимает VirtualTreeGrid)
-				// Валидация происходит в методе: ValidateAndCanonicalize
+				//TODO: The call to Parse(value,CultureInfo.CurrentUICulture) was replaced because Decimal (100.21) is not accepted by the parser, and 100.21 is not accepted by VirtualTreeGrid.
+				// Validation occurs in the method: ValidateAndCanonicalize
 				//return Type.GetType(this.TypeName).GetMethod("Parse", new Type[] { typeof(String), typeof(IFormatProvider) }).Invoke(null, new Object[] { value, CultureInfo.CurrentUICulture, });
 			} else
 			{
@@ -297,8 +293,7 @@ namespace Plugin.Members.TypeWrapper
 					if(value.Equals(TypeStrategy.NullRepresentation, StringComparison.Ordinal))
 						return null;
 
-					XmlQualifiedName result;
-					TypeStrategy.TryParseXmlQualifiedName(value, out result);
+					TypeStrategy.TryParseXmlQualifiedName(value, out XmlQualifiedName result);
 					return result;
 				default:
 					if(value.Equals(TypeStrategy.NullRepresentation))
@@ -330,10 +325,8 @@ namespace Plugin.Members.TypeWrapper
 						}
 						return obj;
 					} else if(this._typeProperty.IsDictionary)
-					{
-						List<Int32> list = null;
-						return TypeStrategy.CreateAndValidateDictionary(this.TypeName, variables, out list);
-					} else if(this._typeProperty.IsNullable)
+						return TypeStrategy.CreateAndValidateDictionary(this.TypeName, variables, out List<Int32> list);
+					else if(this._typeProperty.IsNullable)
 						return variables[0].GetObject();
 					else if(this._typeProperty.IsKeyValuePair)
 					{

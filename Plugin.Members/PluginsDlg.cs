@@ -89,6 +89,7 @@ namespace Plugin.Members
 					List<ListViewItem> itemsToAdd = new List<ListViewItem>();
 					foreach(IPluginMemberInfo member in plugin.Type.Members)
 						itemsToAdd.Add(this.CreateMemberItem(member));
+
 					lvMembers.Items.AddRange(itemsToAdd.ToArray());
 					lvMembers.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 				} else
@@ -142,7 +143,7 @@ namespace Plugin.Members
 		private ListViewItem CreateMemberItem(IPluginMemberInfo member)
 		{
 			ListViewItem result = new ListViewItem();
-			String[] subItems = Array.ConvertAll<String, String>(new String[lvMembers.Columns.Count], delegate(String a) { return String.Empty; });
+			String[] subItems = Array.ConvertAll<String, String>(new String[lvMembers.Columns.Count], a => String.Empty);
 			result.SubItems.AddRange(subItems);
 
 			Int32 imageIndex = PluginsDlg.MemberTypeMapping.TryGetValue(member.MemberType, out imageIndex) ? imageIndex : 0;
