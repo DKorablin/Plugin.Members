@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows.Forms;
 using SAL.Flatbed;
 using SAL.Windows;
 
 namespace Plugin.Members
 {
-	public class PluginWindows : IPlugin
+	public class PluginWindows : IPlugin, IPluginSettings<PluginSettings>
 	{
+		private PluginSettings _settings;
 		private TraceSource _trace;
 		private PluginsDlg _plugins;
 		private Dictionary<String, DockState> _documentTypes;
@@ -17,6 +19,21 @@ namespace Plugin.Members
 		internal IHostWindows HostWindows { get; }
 
 		private IMenuItem ConfigMenu { get; set; }
+
+		Object IPluginSettings.Settings => this.Settings;
+
+		public PluginSettings Settings
+		{
+			get
+			{
+				if(this._settings == null)
+				{
+					this._settings = new PluginSettings();
+					this.HostWindows.Plugins.Settings(this).LoadAssemblyParameters(this._settings);
+				}
+				return this._settings;
+			}
+		}
 
 		private Dictionary<String, DockState> DocumentTypes
 		{
@@ -56,7 +73,8 @@ namespace Plugin.Members
 
 		Boolean IPlugin.OnDisconnection(DisconnectMode mode)
 		{
-			this._plugins?.Dispose();
+			if(this._plugins != null && !this._plugins.IsDisposed)
+				this._plugins.Dispose();
 
 			if(this.ConfigMenu != null)
 				this.HostWindows.MainMenu.Items.Remove(this.ConfigMenu);
@@ -80,8 +98,21 @@ namespace Plugin.Members
 		private void ConfigMenu_Click(Object sender, EventArgs e)
 		{
 			if(this._plugins == null)
+			{
 				this._plugins = new PluginsDlg(this);
+				this._plugins.FormClosed += this.plugins_FormClosed;
+			}
 			this._plugins.Show();
+		}
+
+		private void plugins_FormClosed(Object sender, FormClosedEventArgs e)
+		{
+			if(e.CloseReason == CloseReason.UserClosing)
+			{
+				this._plugins.FormClosed -= this.plugins_FormClosed;
+				this._plugins.Dispose();
+				this._plugins = null;
+			}
 		}
 	}
 }

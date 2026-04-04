@@ -134,7 +134,7 @@ namespace Plugin.Members.TypeWrapper
 
 		public String GetDefaultValue()
 		{
-			if(this._enumChoices != null)
+			if(this._enumChoices?.Length > 0)
 				return this._enumChoices[0];
 			else if(TypeStrategy.numericTypes.Contains(this.TypeName))
 				return "0";

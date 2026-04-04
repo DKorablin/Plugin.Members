@@ -31,11 +31,25 @@ namespace Plugin.Members
 			splitInformation.Panel2Collapsed = true;
 		}
 
-		protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+		protected override void OnLoad(EventArgs e)
 		{
-			e.Cancel = true;
-			base.Hide();
-			base.OnClosing(e);
+			if(this._plugin.Settings.SplitterDistance > 0)
+				splitMain.SplitterDistance = this._plugin.Settings.SplitterDistance;
+
+			if(this._plugin.Settings.WindowSize != Size.Empty)
+				this.Size = this._plugin.Settings.WindowSize;
+			if(this._plugin.Settings.WindowLocation != Point.Empty)
+				this.Location = this._plugin.Settings.WindowLocation;
+
+			base.OnLoad(e);
+		}
+
+		protected override void OnClosed(EventArgs e)
+		{
+			this._plugin.Settings.SplitterDistance = splitMain.SplitterDistance;
+			this._plugin.Settings.WindowSize = this.Size;
+			this._plugin.Settings.WindowLocation = this.Location;
+			base.OnClosed(e);
 		}
 
 		private void PluginsDlg_Load(Object sender, EventArgs e)
