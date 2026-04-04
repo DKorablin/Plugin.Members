@@ -216,8 +216,7 @@ namespace Plugin.Members.TypeWrapper
 					if(input.Equals(TypeStrategy.NullRepresentation))
 						return text;
 
-					XmlQualifiedName xmlName;
-					return TypeStrategy.TryParseXmlQualifiedName(input, out xmlName) ? xmlName.ToString() : null;
+					return TypeStrategy.TryParseXmlQualifiedName(input, out XmlQualifiedName xmlName) ? xmlName.ToString() : null;
 				case "System.DateTime":
 					try
 					{
@@ -325,7 +324,7 @@ namespace Plugin.Members.TypeWrapper
 						}
 						return obj;
 					} else if(this._typeProperty.IsDictionary)
-						return TypeStrategy.CreateAndValidateDictionary(this.TypeName, variables, out List<Int32> list);
+						return TypeStrategy.CreateAndValidateDictionary(this.TypeName, variables, out List<Int32> _);
 					else if(this._typeProperty.IsNullable)
 						return variables[0].GetObject();
 					else if(this._typeProperty.IsKeyValuePair)
