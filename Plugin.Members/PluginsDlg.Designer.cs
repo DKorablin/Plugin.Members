@@ -154,7 +154,7 @@
 			// lvPlugins
 			// 
 			this.lvPlugins.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            colName});
+			colName});
 			resources.ApplyResources(this.lvPlugins, "lvPlugins");
 			this.lvPlugins.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
 			this.lvPlugins.HideSelection = false;
@@ -175,7 +175,7 @@
 			// lvMembers
 			// 
 			this.lvMembers.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.colMemberName});
+			this.colMemberName});
 			resources.ApplyResources(this.lvMembers, "lvMembers");
 			this.lvMembers.FullRowSelect = true;
 			this.lvMembers.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
