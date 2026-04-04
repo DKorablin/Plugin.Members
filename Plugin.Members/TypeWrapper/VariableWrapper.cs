@@ -51,10 +51,10 @@ namespace Plugin.Members.TypeWrapper
 			{
 				if(this._name == null)
 					return this.declaredMember.VariableName;
-				else if(this.IsValid)
+				if(this.IsValid)
 					return this._name;
-				else
-					return VariableWrapper.DuplicateKeyMark;
+
+				return VariableWrapper.DuplicateKeyMark;
 			}
 		}
 

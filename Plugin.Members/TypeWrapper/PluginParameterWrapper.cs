@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using SAL.Flatbed;
 
 namespace Plugin.Members.TypeWrapper
@@ -63,7 +62,7 @@ namespace Plugin.Members.TypeWrapper
 
 		public String ValidateAndCanonicalize(String value, out String errorMessage)
 		{
-			String text = this._type.ValidateAndCanonicalize(value, out Int32 num);
+			String text = this._type.ValidateAndCanonicalize(value, out Int32 _);
 			errorMessage = null;
 
 			if(text == null)
