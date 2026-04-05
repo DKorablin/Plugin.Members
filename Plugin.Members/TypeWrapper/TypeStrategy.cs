@@ -259,7 +259,7 @@ namespace Plugin.Members.TypeWrapper
 
 		public Object GetObject(String value, VariableWrapper[] variables)
 		{//TODO: Validation method: ServiceMemberInfo.ValidateAndCanonicalize(String, out String) Parsing method: TypeStrategy.GetObject(String, VariableInfo[])
-			if(this._enumChoices != null)
+			if(this._enumChoices?.Length > 0)
 				return Enum.Parse(this.ClientType, value);
 			else if(TypeStrategy.numericTypes.Contains(this.TypeName))
 			{
