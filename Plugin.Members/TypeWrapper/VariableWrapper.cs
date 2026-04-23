@@ -136,12 +136,13 @@ namespace Plugin.Members.TypeWrapper
 					Int32 arrayLength = VariableWrapper.GetArrayLength(this._value);
 					VariableWrapper[] array = this.childVariables;
 					this.childVariables = new VariableWrapper[arrayLength];
-					PluginParameterWrapper member = null;
-					/*foreach(PluginParameterWrapper item in this.declaredMember.Members)
+					PluginTypeWrapper memberType = null;
+					foreach(PluginTypeWrapper item in this.declaredMember.Members)
 					{
-						member = item;
+						memberType = item;
 						break;
-					}*/
+					}
+					PluginParameterWrapper member = memberType == null ? null : new PluginParameterWrapper(memberType.TypeName, memberType);
 
 					for(Int32 i = 0; i < arrayLength; i++)
 					{

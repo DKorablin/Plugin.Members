@@ -142,7 +142,15 @@ namespace Plugin.Members.UI
 				}
 				ParameterTreeAdapter.ChoiceConverter.StaticChoices = this._variables[row].GetSelectionList();
 				PropertyDescriptor descriptor = TypeDescriptor.GetProperties(container)["Choice"];
-				result.CustomInPlaceEdit = TypeEditorHost.Create(descriptor, container);
+				String[] choices = ParameterTreeAdapter.ChoiceConverter.StaticChoices;
+				Int32 capturedRow = row;
+				Int32 capturedColumn = column;
+				result.CustomInPlaceEdit = new SafeTypeEditorHost(descriptor, container, choices, choice =>
+				{
+					LabelEditResult labelEditResult = this.CommitLabelEdit(capturedRow, capturedColumn, choice);
+					if(labelEditResult == LabelEditResult.AcceptEdit && this._virtualTreeControl.InLabelEdit)
+						this._virtualTreeControl.EndLabelEdit(true);
+				});
 			}
 			return result;
 		}

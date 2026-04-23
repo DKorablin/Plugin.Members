@@ -10,6 +10,8 @@ namespace Plugin.Members.TypeWrapper
 
 		private readonly PluginTypeWrapper _type;
 
+		private readonly String _overrideName;
+
 		public EditorType EditorType { get => this._type.EditorType; }
 
 		public String FriendlyTypeName { get => this._type.FriendlyName; }
@@ -20,7 +22,7 @@ namespace Plugin.Members.TypeWrapper
 
 		public String TypeName { get => this._type.TypeName; }
 
-		public String VariableName { get => this._parameter.Name; }
+		public String VariableName { get => this._overrideName ?? this._parameter.Name; }
 
 		public Boolean HasMembers { get => this._type.HasMembers; }
 
@@ -40,6 +42,16 @@ namespace Plugin.Members.TypeWrapper
 			foreach(IPluginMemberInfo member in parameter.Members)
 				if(member is IPluginTypeInfo subType)
 					this.Members.Add(PluginTypeWrapper.GetTypeWrapper(subType));
+
+			foreach(var member in parameter.UnderlyingMembers)
+				if(member is IPluginTypeInfo subType)
+					this.Members.Add(PluginTypeWrapper.GetTypeWrapper(subType));
+		}
+
+		internal PluginParameterWrapper(String name, PluginTypeWrapper type)
+		{
+			this._overrideName = name ?? throw new ArgumentNullException(nameof(name));
+			this._type = type ?? throw new ArgumentNullException(nameof(type));
 		}
 
 		public Int32 CompareTo(Object obj)

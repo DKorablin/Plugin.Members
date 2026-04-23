@@ -12,6 +12,14 @@ namespace Plugin.Members.UI
 			 * private void OnWmGetObject(ref Message message)
 				int accessibleObjectId = (int)message.LParam; <- OverflowException
 			 */
+			if(exception is System.ComponentModel.Win32Exception)
+			{
+				// e.g. "Class already exists" when TypeEditorHost.OpenDropDown fails on net8.0-windows.
+				// Cancel any in-progress label edit so the control stays in a clean state.
+				if(this.InLabelEdit)
+					this.EndLabelEdit(true);
+				return true;
+			}
 			return false;//In any case, we throw the exception above
 			//return base.DisplayException(exception);
 		}

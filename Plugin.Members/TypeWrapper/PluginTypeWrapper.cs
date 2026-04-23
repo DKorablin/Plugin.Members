@@ -51,12 +51,12 @@ namespace Plugin.Members.TypeWrapper
 			this._info = info ?? throw new ArgumentNullException(nameof(info));
 
 			TypeProperty abilities = new TypeProperty(info);
-			this._typeStrategy = new TypeStrategy(info.TypeName, abilities, info.GetDefaultValues());
+			this._typeStrategy = new TypeStrategy(info.AssemblyQualifiedName, abilities, info.GetDefaultValues());
 			this.SubTypes = new List<PluginTypeWrapper>();
 			this.Members = new List<PluginTypeWrapper>();
 
 			if(this._typeStrategy.IsGeneric)
-				foreach(IPluginTypeInfo member in info.GenericMembers)
+				foreach(IPluginTypeInfo member in info.UnderlyingMembers)
 					this.SubTypes.Add(PluginTypeWrapper.GetTypeWrapper(member));
 
 			foreach(IPluginMemberInfo member in info.Members)
@@ -74,7 +74,7 @@ namespace Plugin.Members.TypeWrapper
 			this.Members = new List<PluginTypeWrapper>();
 
 			if(this._typeStrategy.IsGeneric)
-				foreach(IPluginTypeInfo member in info.GenericMembers)
+				foreach(IPluginTypeInfo member in info.UnderlyingMembers)
 					this.SubTypes.Add(PluginTypeWrapper.GetTypeWrapper(member));
 
 			if(!localType.IsBclType())

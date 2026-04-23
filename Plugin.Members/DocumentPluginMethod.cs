@@ -28,21 +28,7 @@ namespace Plugin.Members
 		public DocumentPluginMethod()
 		{
 			InitializeComponent();
-			VirtualTreeColumnHeader[] headers = new VirtualTreeColumnHeader[]
-			{
-				new VirtualTreeColumnHeader(Resources.colMethodName),
-				new VirtualTreeColumnHeader(Resources.colMethodValue),
-				new VirtualTreeColumnHeader(Resources.colMethodType)
-			};
-			gridInput.SetColumnHeaders(headers, true);
 			gridInput.KeyDown += new KeyEventHandler(this.gridInput_KeyDown);
-			VirtualTreeColumnHeader[] headers2 = new VirtualTreeColumnHeader[]
-			{
-				new VirtualTreeColumnHeader(Resources.colMethodName),
-				new VirtualTreeColumnHeader(Resources.colMethodValue),
-				new VirtualTreeColumnHeader(Resources.colMethodType)
-			};
-			gridOutput.SetColumnHeaders(headers2, true);
 			gridOutput.KeyDown += new KeyEventHandler(this.gridOutput_KeyDown);
 		}
 
@@ -103,18 +89,34 @@ namespace Plugin.Members
 		{
 			PluginMethodWrapper method = this._method;
 			VariableWrapper[] variables = this.GetVariables();
-			InvokeMethod(method, variables);
+			VariableWrapper[] output = InvokeMethod(method, variables);
+			if(output.Length > 0)
+				this.PopulateTree(output, this.gridOutput, true);
 		}
 
-		private static void InvokeMethod(PluginMethodWrapper method, VariableWrapper[] variables)
+		private static VariableWrapper[] InvokeMethod(PluginMethodWrapper method, VariableWrapper[] variables)
 		{
 			Object[] args = Array.ConvertAll(variables, p => p.GetObject());
 			Object result = method.Method.Invoke(args);
+
+			IPluginTypeInfo returnType = method.Method.ReturnType;
+			if(returnType.TypeName.Equals("System.Void", StringComparison.Ordinal))
+				return Array.Empty<VariableWrapper>();
+
+			PluginTypeWrapper typeWrapper = PluginTypeWrapper.GetTypeWrapper(returnType);
+			PluginParameterWrapper paramWrapper = new PluginParameterWrapper(returnType.Name, typeWrapper);
+			return new VariableWrapper[] { new VariableWrapper(paramWrapper, result) };
 		}
 
 		private void PopulateTree(VariableWrapper[] variables, VirtualTreeControl parameterTreeView, Boolean readOnly)
 		{
 			parameterTreeView.MultiColumnTree = new MultiColumnTree(3);
+			parameterTreeView.SetColumnHeaders(new VirtualTreeColumnHeader[]
+			{
+				new VirtualTreeColumnHeader(Resources.colMethodName),
+				new VirtualTreeColumnHeader(Resources.colMethodValue),
+				new VirtualTreeColumnHeader(Resources.colMethodType)
+			}, true);
 			ITree tree = (ITree)parameterTreeView.MultiColumnTree;
 			tree.Root = new ParameterTreeAdapter(tree, parameterTreeView, variables, readOnly, null);
 			((ParameterTreeAdapter)((ITree)gridInput.MultiColumnTree).Root).OnValueUpdated += new EventHandler<EventArgs>(PanelMethodInvoker_OnValueUpdated);

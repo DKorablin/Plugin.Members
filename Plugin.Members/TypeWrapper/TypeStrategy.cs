@@ -299,8 +299,10 @@ namespace Plugin.Members.TypeWrapper
 						return null;
 					else if(this._typeProperty.IsArray)
 					{
-						Type type = TypeStrategy.GetClientType(this.TypeName.Substring(0, this.TypeName.Length - 2));
-						Array array = Array.CreateInstance(type, Int32.Parse(value.Substring(TypeStrategy.LengthRepresentation.Length), CultureInfo.CurrentUICulture));
+						Type type = TypeStrategy.GetClientType(this.TypeName);
+						Type elementType = type.GetElementType();
+
+						Array array = Array.CreateInstance(elementType, Int32.Parse(value.Substring(TypeStrategy.LengthRepresentation.Length), CultureInfo.CurrentUICulture));
 						Int32 num = 0;
 						if(variables != null)
 							for(Int32 i = 0; i < variables.Length; i++)
