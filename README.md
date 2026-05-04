@@ -24,6 +24,7 @@ A [Plugin.Members](https://github.com/DKorablin/Plugin.Members) plugin that refl
     - [Flatbed Dialog (Lite)](https://dkorablin.github.io/Flatbed-Dialog-Lite/)
     - [Flatbed MDI](https://dkorablin.github.io/Flatbed-MDI/)
     - [Flatbed MDI (Avalon)](https://dkorablin.github.io/Flatbed-MDI-Avalon/)
+    - [Flatbed MDI (AvaloniaUI)](https://dkorablin.github.io/Flatbed-MDI-AvaloniaUI/)
     - [Flatbed Worker Service](https://dkorablin.github.io/Flatbed-WorkerService/)
 2. Extract to a folder of your choice.
 3. Put the plugin to the `Plugins` subfolder of the host application.
@@ -42,7 +43,7 @@ Once the plugin is loaded by the host, a **Members** entry appears under the **V
 
 | Framework | Notes |
 |-----------|-------|
-| .NET Framework 3.5 | Legacy host support |
+| .NET Framework 4.8 | Legacy host support |
 | .NET 8 (Windows) | Recommended |
 
 ## Dependencies

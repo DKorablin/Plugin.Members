@@ -14,7 +14,7 @@ namespace Plugin.Members
 		private DocumentPluginMethodSettings _settings;
 		private PluginMethodWrapper _method;
 
-		internal PluginWindows Plugin { get => (PluginWindows)this.Window.Plugin; }
+		internal PluginWindows Plugin { get => (PluginWindows)this.Window.Plugin.Instance; }
 
 		private IWindow Window { get => (IWindow)base.Parent; }
 
